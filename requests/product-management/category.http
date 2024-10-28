@@ -1,0 +1,11 @@
+@baseUrl = http://localhost:3333/product-management
+
+# @name create_category
+POST {{baseUrl}}/category
+Content-Type: application/json
+
+{
+    "code": "SHO",
+    "name": "Roupa",
+    "description": ""
+}

@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  code        String @id @unique
+  name        String
+  description String
+
+  @@map("categories")
+}
+
+model Brand {
+  code        String @id @unique
+  name        String
+  description String
+
+  @@map("brands")
+}
+
+model Type {
+  code String @id @unique
+  name String
+  sizes Size[]
+
+  @@map("types")
+}
+
+model Size {
+  code        String @id @unique
+  description String
+  typeCode    String @map("type_code")
+  unitOfMeasure String @map("unit_of_measure")
+
+  type Type @relation(fields: [typeCode], references: [code])
+
+  @@map("sizes")
+}
+
+model Color {
+  code String @id @unique
+  name String
+
+  @@map("colors")
+}
