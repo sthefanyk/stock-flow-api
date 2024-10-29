@@ -13,7 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 // user.prisma
-
 model User {
     id            String @id @default(uuid())
     name          String
@@ -54,7 +53,6 @@ model Rule {
 }
 
 // category.prisma
-
 model Category {
     code        String @id @unique
     name        String

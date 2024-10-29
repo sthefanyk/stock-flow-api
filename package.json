@@ -14,8 +14,7 @@
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "prisma:merge-schemas": "ts-node prisma/mergeSchemas.ts",
-    "prisma:generate": "npm run prisma:merge-schemas",
-    "prisma:migrate": "npx prisma migrate dev"
+    "prisma:migrate": "npm run prisma:merge-schemas && npx prisma migrate dev"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
