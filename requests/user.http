@@ -1,0 +1,12 @@
+@baseUrl = http://localhost:3333/employee-management
+
+# @name create_new_access_for_employee
+POST {{baseUrl}}/access
+Content-Type: application/json
+
+{
+    "name": "Sthefany Kimberly",
+    "email": "sthe",
+    "password": "12345678",
+    "roleName": "FINANCIAL"
+}

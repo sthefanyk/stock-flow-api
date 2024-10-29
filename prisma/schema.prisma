@@ -12,45 +12,88 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+// user.prisma
+
+model User {
+    id            String @id @default(uuid())
+    name          String
+    email         String @unique
+    password_hash String
+    role          Role   @relation(fields: [roleId], references: [name])
+    roleId        String
+
+    @@map("users")
+}
+
+model Role {
+    name        String  @id
+    description String?
+    users       User[]
+    permissions Rule[]
+
+    @@map("roles")
+}
+
+model UseCase {
+    name        String  @id
+    description String?
+    permissions Rule[]
+
+    @@map("use_cases")
+}
+
+model Rule {
+    id        String  @id @default(uuid())
+    role      Role    @relation(fields: [roleId], references: [name])
+    roleId    String
+    use_case  UseCase @relation(fields: [useCaseId], references: [name])
+    useCaseId String
+
+    @@unique([roleId, useCaseId])
+    @@map("rules")
+}
+
+// category.prisma
 
 model Category {
-  code        String @id @unique
-  name        String
-  description String
+    code        String @id @unique
+    name        String
+    description String
 
-  @@map("categories")
+    @@map("categories")
 }
 
 model Brand {
-  code        String @id @unique
-  name        String
-  description String
+    code        String @id @unique
+    name        String
+    description String
 
-  @@map("brands")
+    @@map("brands")
 }
 
 model Type {
-  code String @id @unique
-  name String
-  sizes Size[]
+    code  String @id @unique
+    name  String
+    sizes Size[]
 
-  @@map("types")
+    @@map("types")
 }
 
 model Size {
-  code        String @id @unique
-  description String
-  typeCode    String @map("type_code")
-  unitOfMeasure String @map("unit_of_measure")
+    code          String @id @unique
+    description   String
+    typeCode      String @map("type_code")
+    unitOfMeasure String @map("unit_of_measure")
 
-  type Type @relation(fields: [typeCode], references: [code])
+    type Type @relation(fields: [typeCode], references: [code])
 
-  @@map("sizes")
+    @@map("sizes")
 }
 
 model Color {
-  code String @id @unique
-  name String
+    code String @id @unique
+    name String
 
-  @@map("colors")
+    @@map("colors")
 }
+

@@ -1,0 +1,39 @@
+// user.prisma
+model User {
+    id            String @id @default(uuid())
+    name          String
+    email         String @unique
+    password_hash String
+    role          Role   @relation(fields: [roleId], references: [name])
+    roleId        String
+
+    @@map("users")
+}
+
+model Role {
+    name        String  @id
+    description String?
+    users       User[]
+    permissions Rule[]
+
+    @@map("roles")
+}
+
+model UseCase {
+    name        String  @id
+    description String?
+    permissions Rule[]
+
+    @@map("use_cases")
+}
+
+model Rule {
+    id        String  @id @default(uuid())
+    role      Role    @relation(fields: [roleId], references: [name])
+    roleId    String
+    use_case  UseCase @relation(fields: [useCaseId], references: [name])
+    useCaseId String
+
+    @@unique([roleId, useCaseId])
+    @@map("rules")
+}
