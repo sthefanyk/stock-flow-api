@@ -25,12 +25,12 @@ type CreateNewAccessForEmployeeBodySchema = z.infer<
     typeof createNewAccessForEmployeeBodySchema
 >
 
-@Controller('employee-management/access')
+@Controller('/employee-management')
 @UseGuards(JwtAuthGuard)
 export class CreateNewAccessForEmployee {
     constructor(private prisma: PrismaService) {}
 
-    @Post()
+    @Post('/access')
     @HttpCode(201)
     @UsePipes(
         new ZodValidationPipe<CreateNewAccessForEmployeeBodySchema>(
