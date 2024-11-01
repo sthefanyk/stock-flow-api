@@ -5,9 +5,11 @@ import {
     HttpCode,
     NotFoundException,
     Post,
+    UseGuards,
     UsePipes,
 } from '@nestjs/common'
 import { hash } from 'bcryptjs'
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 import { ZodValidationPipe } from 'src/pipes/zod-validation-pipe'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { z } from 'zod'
@@ -24,6 +26,7 @@ type CreateNewAccessForEmployeeBodySchema = z.infer<
 >
 
 @Controller('employee-management/access')
+@UseGuards(JwtAuthGuard)
 export class CreateNewAccessForEmployee {
     constructor(private prisma: PrismaService) {}
 

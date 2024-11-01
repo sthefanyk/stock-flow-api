@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config'
 import { envSchema } from './env'
 import { AuthModule } from './auth/auth.module'
 import { AuthenticateController } from './controllers/authenticate.controller'
+import { PingController } from './controllers/ping.controller'
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { AuthenticateController } from './controllers/authenticate.controller'
         CreateCategoryController,
         CreateNewAccessForEmployee,
         AuthenticateController,
+        PingController,
     ],
     providers: [PrismaService],
 })

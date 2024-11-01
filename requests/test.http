@@ -1,4 +1,5 @@
 @baseUrl = http://localhost:3333
+
 @authToken = {{authenticate.response.body.access_token}}
 
 # @name authenticate
@@ -12,13 +13,7 @@ Content-Type: application/json
 
 ###
 
-# @name create_category
-POST {{baseUrl}}/product-management/category
+# @name ping
+POST {{baseUrl}}/ping
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
-
-{
-    "code": "SHO",
-    "name": "Roupa",
-    "description": ""
-}

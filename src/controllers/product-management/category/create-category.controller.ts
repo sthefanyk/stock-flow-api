@@ -4,17 +4,30 @@ import {
     Controller,
     HttpCode,
     Post,
+    UseGuards,
 } from '@nestjs/common'
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
+import { ZodValidationPipe } from 'src/pipes/zod-validation-pipe'
 import { PrismaService } from 'src/prisma/prisma.service'
+import { z } from 'zod'
+
+const createCategoryBodySchema = z.object({
+    code: z.string(),
+    name: z.string(),
+    description: z.string().optional().default(''),
+})
+type CreateCategoryBodySchema = z.infer<typeof createCategoryBodySchema>
+const bodyValidationPipe = new ZodValidationPipe(createCategoryBodySchema)
 
 @Controller('/product-management/category')
+@UseGuards(JwtAuthGuard)
 export class CreateCategoryController {
     constructor(private prisma: PrismaService) {}
 
     @Post()
     @HttpCode(201)
-    async handle(@Body() body: any) {
-        const { code, name, description } = body
+    async handle(@Body(bodyValidationPipe) body: CreateCategoryBodySchema) {
+        const { code, name, description } = createCategoryBodySchema.parse(body)
 
         const categoryWithSameCode = await this.prisma.category.findUnique({
             where: {
