@@ -8,7 +8,7 @@ export default defineConfig({
         globals: true,
         root: './',
         exclude: [...configDefaults.exclude, '**/data/pg/**'],
-        setupFiles: ['./test/setup-e2e.ts'],
+        setupFiles: ['./src/test/setup-e2e.ts'],
     },
     plugins: [
         tsConfigPaths(),
