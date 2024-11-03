@@ -15,7 +15,7 @@ export class InMemoryRoleRepository implements RoleDAO {
     }
 
     async delete(entity: Role): Promise<void> {
-        this.items = this.items.filter((item) => item.equals(entity))
+        this.items = this.items.filter((item) => !item.equals(entity))
     }
 
     async findByName(name: string): Promise<Role | null> {

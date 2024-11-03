@@ -2,6 +2,8 @@ import { InMemoryRoleRepository } from '@/infra/repositories/in-memory/user-and-
 import { CreateRoleUseCase } from './create-role'
 import { ValidationError } from '@/shared/errors/entity-errors/validation-error'
 import { ResourcesAlreadyExistError } from '@/shared/errors/use-case-errors/resources-already-exist-error'
+import { Role } from '@/domain/user-and-permission-management/enterprise/entities/role'
+import { makeRole } from '@/test/factories/user-and-permission-management/make-role'
 
 describe('Create role', () => {
     it('should be able to create role', async () => {
@@ -13,6 +15,9 @@ describe('Create role', () => {
         })
 
         expect(result.isRight()).toBe(true)
+        const rolesResult = result.value as { role: Role }
+        expect(rolesResult.role.name).toBe('ROLE')
+
         expect(repository.items).length(1)
         expect(repository.items[0].name).toBe('ROLE')
     })
@@ -34,12 +39,10 @@ describe('Create role', () => {
         const repository = new InMemoryRoleRepository()
         const usecase = new CreateRoleUseCase(repository)
 
-        await usecase.execute({
-            name: 'ROLE',
-        })
+        await repository.create(makeRole({ name: 'ROLE' }))
 
         const result = await usecase.execute({
-            name: 'ROLE',
+            name: 'role',
         })
 
         expect(result.isLeft()).toBe(true)

@@ -1,6 +1,6 @@
 import { Either, left, right } from '@/shared/errors/contracts/either'
-import { Role } from '../../enterprise/entities/role'
-import { RoleDAO } from '../DAO/role-dao'
+import { Role } from '../../../enterprise/entities/role'
+import { RoleDAO } from '../../DAO/role-dao'
 import { ResourcesAlreadyExistError } from '@/shared/errors/use-case-errors/resources-already-exist-error'
 import { ValidationError } from '@/shared/errors/entity-errors/validation-error'
 
@@ -15,7 +15,9 @@ export class CreateRoleUseCase {
 
     async execute({ name }: CreateRoleInput): Promise<CreateRoleOutput> {
         try {
-            const roleExists = await this.roleRepository.findByName(name)
+            const roleExists = await this.roleRepository.findByName(
+                name.toUpperCase(),
+            )
 
             if (roleExists) {
                 throw new ResourcesAlreadyExistError()

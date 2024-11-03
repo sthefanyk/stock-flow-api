@@ -1,13 +1,21 @@
 import { Entity } from '@/shared/entities/entity'
 import { ValidationError } from '@/shared/errors/entity-errors/validation-error'
 
-interface RoleProps {
+export interface RoleProps {
     name: string
 }
 
 export class Role extends Entity<RoleProps> {
     get name() {
         return this.props.name
+    }
+
+    public equals(entity: Role): boolean {
+        if (entity.name === this.name) {
+            return true
+        }
+
+        return false
     }
 
     static create(props: RoleProps) {
