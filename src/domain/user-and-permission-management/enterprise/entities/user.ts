@@ -2,12 +2,14 @@ import { Entity } from '@/shared/entities/entity'
 import { Role } from './role'
 import { ValidationError } from '@/shared/errors/entity-errors/validation-error'
 import { UniqueEntityID } from '@/shared/value-objects/unique-entity-id'
+import { UserStatus } from '../enums/user-status'
 
 export interface UserProps {
     name: string
     email: string
     password: string
     role: Role
+    status: UserStatus
 }
 
 export class User extends Entity<UserProps> {
@@ -25,6 +27,18 @@ export class User extends Entity<UserProps> {
 
     get role() {
         return this.props.role
+    }
+
+    get status() {
+        return this.props.status
+    }
+
+    changeStatus(newStatus: string) {
+        this.props.status = UserStatus.getUserStatusByName(newStatus)!
+    }
+
+    changeRole(newRole: Role) {
+        this.props.role = newRole
     }
 
     public equals(entity: User): boolean {
@@ -49,6 +63,7 @@ export class User extends Entity<UserProps> {
 
         // TODO: Validation for the email
         // TODO: Validation for the password
+        // TODO: Validation for the status
         return props
     }
 }

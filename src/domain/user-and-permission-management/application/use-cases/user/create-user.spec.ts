@@ -42,6 +42,7 @@ describe('Create user', () => {
             email: entity.email,
             password: entity.password,
             role: entity.role.name,
+            status: 'active',
         })
 
         expect(result.isRight()).toBe(true)
@@ -63,6 +64,7 @@ describe('Create user', () => {
             email: entity.email,
             password: entity.password,
             role: entity.role.name,
+            status: 'active',
         })
 
         expect(result.isLeft()).toBe(true)
@@ -70,6 +72,29 @@ describe('Create user', () => {
 
         const { message } = result.value as ValidationError
         expect(message).toBe('The name cannot be empty.')
+
+        const items = await userRepository.listAll()
+        expect(items).toHaveLength(0)
+    })
+
+    it('should return a ValidationError if status invalid', async ({
+        sut,
+        userRepository,
+        entity,
+    }: TestContextWithSut) => {
+        const result = await sut.execute({
+            name: entity.name,
+            email: entity.email,
+            password: entity.password,
+            role: entity.role.name,
+            status: 'invalid',
+        })
+
+        expect(result.isLeft()).toBe(true)
+        expect(result.value).toBeInstanceOf(ValidationError)
+
+        const { message } = result.value as ValidationError
+        expect(message).toBe('User Status invalid')
 
         const items = await userRepository.listAll()
         expect(items).toHaveLength(0)
@@ -92,6 +117,7 @@ describe('Create user', () => {
             email: user.email,
             password: user.password,
             role: user.role.name,
+            status: 'active',
         })
 
         expect(result.isLeft()).toBe(true)
@@ -114,6 +140,7 @@ describe('Create user', () => {
             email: entity.email,
             password: entity.password,
             role: 'unregistered',
+            status: 'active',
         })
 
         expect(result.isLeft()).toBe(true)

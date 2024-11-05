@@ -5,12 +5,14 @@ import { ResourcesAlreadyExistError } from '@/shared/errors/use-case-errors/reso
 import { ValidationError } from '@/shared/errors/entity-errors/validation-error'
 import { RoleDAO } from '../../DAO/role-dao'
 import { ResourceNotFoundError } from '@/shared/errors/use-case-errors/resource-not-found-error'
+import { UserStatus } from '@/domain/user-and-permission-management/enterprise/enums/user-status'
 
 type CreateUserInput = {
     name: string
     email: string
     password: string
     role: string
+    status: string
 }
 
 type CreateUserOutput = Either<Error, { user: User }>
@@ -26,6 +28,7 @@ export class CreateUserUseCase {
         email,
         password,
         role,
+        status,
     }: CreateUserInput): Promise<CreateUserOutput> {
         try {
             const userExists = await this.userRepository.findByEmail(
@@ -51,6 +54,7 @@ export class CreateUserUseCase {
                 email,
                 password,
                 role: roleFound,
+                status: UserStatus.getUserStatusByName(status)!,
             })
 
             await this.userRepository.create(user)
