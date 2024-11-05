@@ -7,6 +7,7 @@ export interface PermissionDAO {
     save(entity: Permission): Promise<void>
     delete(entity: Permission): Promise<void>
     find(entity: Permission): Promise<Permission | null>
+    findById(id: string): Promise<Permission | null>
     findByUsecase(usecase: UseCase): Promise<Permission[]>
     findBySubdomain(subdomain: Subdomain): Promise<Permission[]>
     listAll(): Promise<Permission[]>

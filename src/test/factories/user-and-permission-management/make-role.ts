@@ -6,7 +6,7 @@ import {
 
 export function makeRole(override: Partial<RoleProps> = {}): Role {
     const role = Role.create({
-        name: faker.word.noun(),
+        name: faker.person.jobArea(),
         ...override,
     })
 
