@@ -6,7 +6,7 @@ const outputPath = path.join(__dirname, 'schema.prisma')
 const schemaFiles = [
     path.join(__dirname, 'base_schema.prisma'),
     path.join(__dirname, 'schemas', 'user.prisma'),
-    path.join(__dirname, 'schemas', 'product.prisma'),
+    path.join(__dirname, 'schemas', 'action_log.prisma'),
 ]
 
 function mergeSchemas() {

@@ -1,39 +1,64 @@
 // user.prisma
 model User {
-    id            String @id @default(uuid())
-    name          String
-    email         String @unique
-    password_hash String
-    role          Role   @relation(fields: [roleId], references: [name])
-    roleId        String
+    id              String     @id @default(uuid())
+    name            String
+    email           String     @unique
+    password_hash   String
+    status          String
+    role            Role       @relation(fields: [role_name], references: [name])
+    role_name       String
+    user_group      UserGroup? @relation(fields: [user_group_name], references: [name])
+    user_group_name String?
+
+    action_log     ActionLog[]
 
     @@map("users")
 }
 
 model Role {
-    name        String  @id
-    description String?
-    users       User[]
-    permissions Rule[]
+    name String @id
+
+    users User[]
 
     @@map("roles")
 }
 
 model UseCase {
-    name        String  @id
-    description String?
-    permissions Rule[]
+    name        String @id
+    description String
+
+    permissions Permission[]
+    action_log     ActionLog[]
 
     @@map("use_cases")
 }
 
-model Rule {
-    id        String  @id @default(uuid())
-    role      Role    @relation(fields: [roleId], references: [name])
-    roleId    String
-    use_case  UseCase @relation(fields: [useCaseId], references: [name])
-    useCaseId String
+model Subdomain {
+    name        String @id
+    description String
 
-    @@unique([roleId, useCaseId])
-    @@map("rules")
+    permissions Permission[]
+
+    @@map("subdomains")
+}
+
+model Permission {
+    subdomain       Subdomain  @relation(fields: [subdomain_name], references: [name])
+    subdomain_name  String
+    usecase         UseCase    @relation(fields: [use_case_name], references: [name])
+    use_case_name   String
+    access_level    String
+    user_group      UserGroup? @relation(fields: [user_group_name], references: [name])
+    user_group_name String?
+
+    @@unique([subdomain_name, use_case_name])
+    @@map("permissions")
+}
+
+model UserGroup {
+    name        String       @id
+    permissions Permission[]
+    users       User[]
+
+    @@map("user_groups")
 }

@@ -1,0 +1,12 @@
+// action_log.prisma
+model ActionLog {
+    id                   String   @id @default(uuid())
+    user_who_executed    User     @relation(fields: [user_who_executed_id], references: [id])
+    user_who_executed_id String
+    usecase              UseCase  @relation(fields: [use_case_name], references: [name])
+    use_case_name        String
+    details              String
+    date                 DateTime
+
+    @@map("action_logs")
+}
