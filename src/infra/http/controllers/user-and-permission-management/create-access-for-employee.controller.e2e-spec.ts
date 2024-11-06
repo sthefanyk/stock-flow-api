@@ -1,10 +1,10 @@
 import request from 'supertest'
-import { AppModule } from '@/app.module'
 import { INestApplication } from '@nestjs/common'
 import { Test } from '@nestjs/testing'
-import { PrismaService } from '@/prisma/prisma.service'
 import { JwtService } from '@nestjs/jwt'
 import { hash } from 'bcryptjs'
+import { PrismaService } from '@/infra/prisma/prisma.service'
+import { AppModule } from '@/infra/app.module'
 
 describe('Create access for employee (E2E)', () => {
     let app: INestApplication
@@ -28,7 +28,6 @@ describe('Create access for employee (E2E)', () => {
         await prisma.role.create({
             data: {
                 name: 'TEST',
-                description: '',
             },
         })
 
@@ -44,6 +43,7 @@ describe('Create access for employee (E2E)', () => {
                         name: 'TEST',
                     },
                 },
+                status: '',
             },
         })
 

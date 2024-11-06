@@ -1,7 +1,7 @@
+import { CurrentUser } from '@/infra/auth/current-user.decorator'
+import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
+import { UserPayload } from '@/infra/auth/jwt.strategy'
 import { Controller, Post, UseGuards } from '@nestjs/common'
-import { CurrentUser } from '@/auth/current-user.decorator'
-import { JwtAuthGuard } from '@/auth/jwt-auth.guard'
-import { UserPayload } from '@/auth/jwt.strategy'
 
 @Controller('/ping')
 @UseGuards(JwtAuthGuard)

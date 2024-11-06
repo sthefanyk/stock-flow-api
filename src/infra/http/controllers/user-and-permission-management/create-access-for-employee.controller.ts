@@ -1,3 +1,5 @@
+import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
+import { PrismaService } from '@/infra/prisma/prisma.service'
 import {
     Body,
     ConflictException,
@@ -9,16 +11,14 @@ import {
     UsePipes,
 } from '@nestjs/common'
 import { hash } from 'bcryptjs'
-import { JwtAuthGuard } from '@/auth/jwt-auth.guard'
-import { ZodValidationPipe } from '@/pipes/zod-validation.pipe'
-import { PrismaService } from '@/prisma/prisma.service'
 import { z } from 'zod'
+import { ZodValidationPipe } from '../../pipes/zod-validation.pipe'
 
 const createNewAccessForEmployeeBodySchema = z.object({
     name: z.string(),
     email: z.string().email(),
     password: z.string().min(8),
-    roleName: z.string().toUpperCase(),
+    role_name: z.string().toUpperCase(),
 })
 
 type CreateNewAccessForEmployeeBodySchema = z.infer<
@@ -38,8 +38,12 @@ export class CreateNewAccessForEmployee {
         ),
     )
     async handle(@Body() data: CreateNewAccessForEmployeeBodySchema) {
-        const { name, email, password, roleName } =
-            createNewAccessForEmployeeBodySchema.parse(data)
+        const {
+            name,
+            email,
+            password,
+            role_name: roleName,
+        } = createNewAccessForEmployeeBodySchema.parse(data)
 
         const userWithSameEmail = await this.prisma.user.findUnique({
             where: {
@@ -75,6 +79,7 @@ export class CreateNewAccessForEmployee {
                         name: roleName,
                     },
                 },
+                status: '',
             },
         })
     }
