@@ -9,6 +9,8 @@ import { InMemoryUserRepository } from '@/infra/repositories/in-memory/user-and-
 import { InMemoryUseCaseRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-usecase-repository'
 import { makeActionLog } from '@/test/factories/activity-log/make-action-log'
 import { ResourceNotFoundError } from '@/shared/errors/use-case-errors/resource-not-found-error'
+import { makeUseCase } from '@/test/factories/user-and-permission-management/make-usecase'
+import { makeUser } from '@/test/factories/user-and-permission-management/make-user'
 
 interface TestContextWithSut extends TestContext {
     actionLogRepository: ActionLogDAO
@@ -34,8 +36,14 @@ describe('NewActionLog', () => {
 
         context.entity = makeActionLog()
 
-        context.useCaseRepository.create(context.entity.action)
-        context.userRepository.create(context.entity.user)
+        context.useCaseRepository.create(
+            makeUseCase({
+                name: context.entity.usecase.toLowerCase(),
+            }),
+        )
+        context.userRepository.create(
+            makeUser({}, context.entity.userWhoExecutedID),
+        )
     })
 
     it('should be able to create new action log', async ({
@@ -44,9 +52,7 @@ describe('NewActionLog', () => {
         actionLogRepository,
     }: TestContextWithSut) => {
         const result = await sut.execute({
-            userID: entity.user.id.toString(),
-            action: entity.action.name,
-            details: entity.details,
+            actionLog: entity,
         })
 
         expect(result.isRight()).toBeTruthy()
@@ -54,8 +60,8 @@ describe('NewActionLog', () => {
         const items = await actionLogRepository.listAll()
         expect(items).toHaveLength(1)
 
-        expect(items[0].user).toBe(entity.user)
-        expect(items[0].action).toBe(entity.action)
+        expect(items[0].userWhoExecutedID).toBe(entity.userWhoExecutedID)
+        expect(items[0].usecase).toBe(entity.usecase)
         expect(items[0].details).toBe(entity.details)
         expect(items[0].date).toBeTruthy()
     })
@@ -66,9 +72,11 @@ describe('NewActionLog', () => {
         actionLogRepository,
     }: TestContextWithSut) => {
         const result = await sut.execute({
-            userID: 'unregistered',
-            action: entity.action.name,
-            details: entity.details,
+            actionLog: ActionLog.create({
+                userWhoExecutedID: 'unregistered',
+                details: entity.details,
+                usecase: entity.usecase,
+            }),
         })
 
         expect(result.isLeft()).toBeTruthy()
@@ -86,15 +94,17 @@ describe('NewActionLog', () => {
         actionLogRepository,
     }: TestContextWithSut) => {
         const result = await sut.execute({
-            userID: entity.user.id.toString(),
-            action: 'unregistered',
-            details: entity.details,
+            actionLog: ActionLog.create({
+                userWhoExecutedID: entity.userWhoExecutedID,
+                details: entity.details,
+                usecase: 'unregistered',
+            }),
         })
 
         expect(result.isLeft()).toBeTruthy()
 
         const { message } = result.value as ResourceNotFoundError
-        expect(message).toBe('Action not found')
+        expect(message).toBe('Use case not found')
 
         const items = await actionLogRepository.listAll()
         expect(items).toHaveLength(0)

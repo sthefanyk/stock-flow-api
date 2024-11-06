@@ -7,14 +7,17 @@ import { makeUser } from '@/test/factories/user-and-permission-management/make-u
 import { InMemoryRoleRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-role-repository'
 import { UserDAO } from '../../DAO/user-dao'
 import { RoleDAO } from '../../DAO/role-dao'
-import { TestContext } from 'vitest'
+import { MockInstance, TestContext } from 'vitest'
 import { ResourceNotFoundError } from '@/shared/errors/use-case-errors/resource-not-found-error'
+import { waitFor } from '@/test/utils/wait-for'
 
 interface TestContextWithSut extends TestContext {
     userRepository: UserDAO
     roleRepository: RoleDAO
+    userExecuted: User
     entity: User
     sut: CreateUserUseCase
+    logSpy: MockInstance
 }
 
 describe('Create user', () => {
@@ -27,17 +30,24 @@ describe('Create user', () => {
             context.roleRepository,
         )
 
+        context.userExecuted = makeUser()
         context.entity = makeUser()
 
+        await context.userRepository.create(context.userExecuted)
         await context.roleRepository.create(context.entity.role)
+
+        context.logSpy = vi.spyOn(context.sut, 'log')
     })
 
     it('should be able to create user', async ({
         sut,
         userRepository,
         entity,
+        userExecuted,
+        logSpy,
     }: TestContextWithSut) => {
         const result = await sut.execute({
+            userWhoExecutedID: userExecuted.id.toString(),
             name: entity.name,
             email: entity.email,
             password: entity.password,
@@ -50,16 +60,22 @@ describe('Create user', () => {
         expect(user.id).toBeTruthy()
 
         const items = await userRepository.listAll()
-        expect(items).toHaveLength(1)
-        expect(items[0].email).toBe(entity.email)
+        expect(items).toHaveLength(2)
+        expect(items[1].email).toBe(entity.email)
+
+        await waitFor(async () => {
+            expect(logSpy).toHaveBeenCalled()
+        })
     })
 
     it('should return a ValidationError if name be empty', async ({
         sut,
         userRepository,
         entity,
+        userExecuted,
     }: TestContextWithSut) => {
         const result = await sut.execute({
+            userWhoExecutedID: userExecuted.id.toString(),
             name: '',
             email: entity.email,
             password: entity.password,
@@ -74,15 +90,17 @@ describe('Create user', () => {
         expect(message).toBe('The name cannot be empty.')
 
         const items = await userRepository.listAll()
-        expect(items).toHaveLength(0)
+        expect(items).toHaveLength(1)
     })
 
     it('should return a ValidationError if status invalid', async ({
         sut,
         userRepository,
         entity,
+        userExecuted,
     }: TestContextWithSut) => {
         const result = await sut.execute({
+            userWhoExecutedID: userExecuted.id.toString(),
             name: entity.name,
             email: entity.email,
             password: entity.password,
@@ -97,13 +115,14 @@ describe('Create user', () => {
         expect(message).toBe('User Status invalid')
 
         const items = await userRepository.listAll()
-        expect(items).toHaveLength(0)
+        expect(items).toHaveLength(1)
     })
 
     it('should return a ResourcesAlreadyExistError if user email already exists', async ({
         sut,
         userRepository,
         entity,
+        userExecuted,
     }: TestContextWithSut) => {
         await userRepository.create(makeUser({ email: 'johndoe.example.com' }))
 
@@ -113,6 +132,7 @@ describe('Create user', () => {
         })
 
         const result = await sut.execute({
+            userWhoExecutedID: userExecuted.id.toString(),
             name: user.name,
             email: user.email,
             password: user.password,
@@ -127,15 +147,17 @@ describe('Create user', () => {
         expect(message).toBe('This email already exists')
 
         const items = await userRepository.listAll()
-        expect(items).toHaveLength(1)
+        expect(items).toHaveLength(2)
     })
 
     it('should return a ResourceNotFoundError if the role is not found', async ({
         sut,
         entity,
         userRepository,
+        userExecuted,
     }: TestContextWithSut) => {
         const result = await sut.execute({
+            userWhoExecutedID: userExecuted.id.toString(),
             name: entity.name,
             email: entity.email,
             password: entity.password,
@@ -150,6 +172,6 @@ describe('Create user', () => {
         expect(message).toBe('Role not found')
 
         const items = await userRepository.listAll()
-        expect(items).length(0)
+        expect(items).length(1)
     })
 })

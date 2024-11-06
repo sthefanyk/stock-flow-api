@@ -8,7 +8,7 @@ export abstract class Entity<T> {
         return this._id
     }
 
-    public equals(entity: Entity<any>) {
+    public equals(entity: Entity<unknown>) {
         if (entity === this) {
             return true
         }

@@ -6,9 +6,7 @@ import { ResourceNotFoundError } from '@/shared/errors/use-case-errors/resource-
 import { ActionLog } from '../../enterprise/entities/action-log'
 
 type NewActionLogInput = {
-    userID: string
-    action: string
-    details: string
+    actionLog: ActionLog
 }
 
 type NewActionLogOutput = Either<Error, null>
@@ -21,30 +19,24 @@ export class NewActionLogUseCase {
     ) {}
 
     async execute({
-        userID,
-        action,
-        details,
+        actionLog,
     }: NewActionLogInput): Promise<NewActionLogOutput> {
         try {
-            const userFound = await this.userRepository.findById(userID)
+            const userFound = await this.userRepository.findById(
+                actionLog.userWhoExecutedID,
+            )
 
             if (!userFound) {
                 throw new ResourceNotFoundError('User not found')
             }
 
             const useCaseFound = await this.useCaseRepository.findByName(
-                action.toLowerCase(),
+                actionLog.usecase.toLowerCase(),
             )
 
             if (!useCaseFound) {
-                throw new ResourceNotFoundError('Action not found')
+                throw new ResourceNotFoundError('Use case not found')
             }
-
-            const actionLog = ActionLog.create({
-                user: userFound,
-                action: useCaseFound,
-                details,
-            })
 
             await this.actionLogRepository.create(actionLog)
 

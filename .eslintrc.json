@@ -3,6 +3,7 @@
       "@sthefanyk/eslint-config/node"
     ],
     "rules": {
-        "no-useless-constructor": "off"
+        "no-useless-constructor": "off",
+        "no-new": "off"
     }
 }

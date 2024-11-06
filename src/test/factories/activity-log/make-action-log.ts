@@ -13,8 +13,8 @@ export function makeActionLog(
     const usecase = makeUseCase()
 
     const permission = ActionLog.create({
-        user,
-        action: usecase,
+        userWhoExecutedID: user.id.toString(),
+        usecase: usecase.name,
         details: faker.lorem.sentences(),
         ...override,
     })

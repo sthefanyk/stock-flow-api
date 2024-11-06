@@ -1,23 +1,22 @@
-import { UseCase } from '@/domain/user-and-permission-management/enterprise/entities/usecase'
-import { User } from '@/domain/user-and-permission-management/enterprise/entities/user'
-import { Entity } from '@/shared/entities/entity'
+import { NewActionEvent } from '@/domain/activity-log/enterprise/events/new-action-log.event'
+import { AggregateRoot } from '@/shared/entities/aggregate-root'
 import { Optional } from '@/shared/types/optional'
 import { UniqueEntityID } from '@/shared/value-objects/unique-entity-id'
 
 export interface ActionLogProps {
-    user: User
-    action: UseCase
+    userWhoExecutedID: string
+    usecase: string
     details: string
     date: Date
 }
 
-export class ActionLog extends Entity<ActionLogProps> {
-    get user() {
-        return this.props.user
+export class ActionLog extends AggregateRoot<ActionLogProps> {
+    get userWhoExecutedID() {
+        return this.props.userWhoExecutedID
     }
 
-    get action() {
-        return this.props.action
+    get usecase() {
+        return this.props.usecase
     }
 
     get details() {
@@ -43,6 +42,12 @@ export class ActionLog extends Entity<ActionLogProps> {
             }),
             id,
         )
+
+        const isNewActionLog = !id
+        if (isNewActionLog) {
+            actionLog.addDomainEvent(new NewActionEvent(actionLog))
+        }
+
         return actionLog
     }
 

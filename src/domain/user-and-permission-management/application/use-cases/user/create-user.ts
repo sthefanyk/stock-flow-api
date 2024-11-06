@@ -6,8 +6,10 @@ import { ValidationError } from '@/shared/errors/entity-errors/validation-error'
 import { RoleDAO } from '../../DAO/role-dao'
 import { ResourceNotFoundError } from '@/shared/errors/use-case-errors/resource-not-found-error'
 import { UserStatus } from '@/domain/user-and-permission-management/enterprise/enums/user-status'
+import { UseCase } from '@/shared/use-cases/use-case'
 
 type CreateUserInput = {
+    userWhoExecutedID: string
     name: string
     email: string
     password: string
@@ -17,13 +19,16 @@ type CreateUserInput = {
 
 type CreateUserOutput = Either<Error, { user: User }>
 
-export class CreateUserUseCase {
+export class CreateUserUseCase extends UseCase {
     constructor(
         private userRepository: UserDAO,
         private roleRepository: RoleDAO,
-    ) {}
+    ) {
+        super(CreateUserUseCase.name)
+    }
 
     async execute({
+        userWhoExecutedID,
         name,
         email,
         password,
@@ -58,6 +63,11 @@ export class CreateUserUseCase {
             })
 
             await this.userRepository.create(user)
+
+            this.log({
+                details: `User ${user.id.toString()} criado.`,
+                userWhoExecutedID,
+            })
 
             return right({ user })
         } catch (error) {

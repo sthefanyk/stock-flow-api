@@ -1,6 +1,5 @@
 import { ActionLogDAO } from '@/domain/activity-log/application/DAO/action-log-dao'
 import { ActionLog } from '@/domain/activity-log/enterprise/entities/action-log'
-import { UseCase } from '@/domain/user-and-permission-management/enterprise/entities/usecase'
 
 export class InMemoryActionLogRepository implements ActionLogDAO {
     async create(entity: ActionLog): Promise<void> {
@@ -15,8 +14,8 @@ export class InMemoryActionLogRepository implements ActionLogDAO {
         return this.items.find((item) => item.id.toString() === id) || null
     }
 
-    async findByAction(action: UseCase): Promise<ActionLog[]> {
-        return this.items.filter((item) => item.action.equals(action))
+    async findByAction(usecase: string): Promise<ActionLog[]> {
+        return this.items.filter((item) => item.usecase === usecase)
     }
 
     async findByDateInterval(
