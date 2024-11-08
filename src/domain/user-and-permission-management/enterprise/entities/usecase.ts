@@ -3,7 +3,7 @@ import { ValidationError } from '@/shared/errors/entity-errors/validation-error'
 
 export interface UseCaseProps {
     name: string
-    description?: string
+    description?: string | null
 }
 
 export class UseCase extends Entity<UseCaseProps> {

@@ -1,4 +1,4 @@
-import { InMemoryRoleRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-role-repository'
+import { InMemoryRoleRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-role-repository'
 import { CreateRoleUseCase } from './create-role'
 import { ValidationError } from '@/shared/errors/entity-errors/validation-error'
 import { ResourcesAlreadyExistError } from '@/shared/errors/use-case-errors/resources-already-exist-error'

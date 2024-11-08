@@ -1,4 +1,4 @@
-import { InMemorySubdomainRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-subdomain-repository'
+import { InMemorySubdomainRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-subdomain-repository'
 import { ListAllUseCaseUseCase } from './list-all-subdomain'
 import { Subdomain } from '@/domain/user-and-permission-management/enterprise/entities/subdomain'
 import { makeSubdomain } from '@/test/factories/user-and-permission-management/make-subdomain'

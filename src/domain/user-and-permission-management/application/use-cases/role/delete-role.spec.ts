@@ -1,4 +1,4 @@
-import { InMemoryRoleRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-role-repository'
+import { InMemoryRoleRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-role-repository'
 import { DeleteRoleUseCase } from './delete-role'
 import { makeRole } from '@/test/factories/user-and-permission-management/make-role'
 import { ResourceNotFoundError } from '@/shared/errors/use-case-errors/resource-not-found-error'

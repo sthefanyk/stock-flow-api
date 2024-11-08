@@ -1,6 +1,6 @@
 import { FindPermissionByNameSubdomainUseCase } from './find-permission-by-name-subdomain'
-import { InMemoryPermissionRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-permission-repository'
-import { InMemorySubdomainRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-subdomain-repository'
+import { InMemoryPermissionRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-permission-repository'
+import { InMemorySubdomainRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-subdomain-repository'
 import { makePermission } from '@/test/factories/user-and-permission-management/make-permission'
 import { TestContext } from 'vitest'
 import { PermissionDAO } from '../../DAO/permission-dao'

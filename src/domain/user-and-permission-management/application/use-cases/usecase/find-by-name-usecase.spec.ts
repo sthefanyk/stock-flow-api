@@ -1,4 +1,4 @@
-import { InMemoryUseCaseRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-usecase-repository'
+import { InMemoryUseCaseRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-usecase-repository'
 import { makeUseCase } from '@/test/factories/user-and-permission-management/make-usecase'
 import { UseCase } from '@/domain/user-and-permission-management/enterprise/entities/usecase'
 import { FindByNameUseCaseUseCase } from './find-by-name-usecase'

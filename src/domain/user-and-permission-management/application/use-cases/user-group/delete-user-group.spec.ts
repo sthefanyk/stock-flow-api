@@ -1,4 +1,4 @@
-import { InMemoryUserGroupRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-user-group-repository'
+import { InMemoryUserGroupRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-user-group-repository'
 import { DeleteUserGroupUseCase } from './delete-user-group'
 import { makeUserGroup } from '@/test/factories/user-and-permission-management/make-user-group'
 import { ResourceNotFoundError } from '@/shared/errors/use-case-errors/resource-not-found-error'

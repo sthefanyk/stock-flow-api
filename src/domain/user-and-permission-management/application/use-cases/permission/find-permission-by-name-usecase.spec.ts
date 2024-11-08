@@ -1,6 +1,6 @@
 import { FindPermissionByNameUsecaseUseCase } from './find-permission-by-name-usecase'
-import { InMemoryPermissionRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-permission-repository'
-import { InMemoryUseCaseRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-usecase-repository'
+import { InMemoryPermissionRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-permission-repository'
+import { InMemoryUseCaseRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-usecase-repository'
 import { makePermission } from '@/test/factories/user-and-permission-management/make-permission'
 import { TestContext } from 'vitest'
 import { PermissionDAO } from '../../DAO/permission-dao'

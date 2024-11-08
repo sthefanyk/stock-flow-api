@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common'
 import { Test } from '@nestjs/testing'
 import { JwtService } from '@nestjs/jwt'
 import { hash } from 'bcryptjs'
-import { PrismaService } from '@/infra/prisma/prisma.service'
+import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { AppModule } from '@/infra/app.module'
 
 describe('Create access for employee (E2E)', () => {

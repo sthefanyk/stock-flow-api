@@ -1,4 +1,4 @@
-import { InMemoryUserRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-user-repository'
+import { InMemoryUserRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-user-repository'
 import { ChangeUserStatusUseCase } from './change-user-status'
 import { ValidationError } from '@/shared/errors/entity-errors/validation-error'
 import { User } from '@/domain/user-and-permission-management/enterprise/entities/user'

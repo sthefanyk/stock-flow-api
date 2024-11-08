@@ -1,4 +1,4 @@
-import { InMemoryPermissionRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-permission-repository'
+import { InMemoryPermissionRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-permission-repository'
 import { ListAllPermissionUseCase } from './list-all-permission'
 import { makePermission } from '@/test/factories/user-and-permission-management/make-permission'
 import { Permission } from '@/domain/user-and-permission-management/enterprise/entities/permission'

@@ -1,4 +1,4 @@
-import { InMemoryUserGroupRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-user-group-repository'
+import { InMemoryUserGroupRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-user-group-repository'
 import { makeUserGroup } from '@/test/factories/user-and-permission-management/make-user-group'
 import { UserGroup } from '@/domain/user-and-permission-management/enterprise/entities/user-group'
 import { FindByNameUserGroupUseCase } from './find-by-name-user-group'

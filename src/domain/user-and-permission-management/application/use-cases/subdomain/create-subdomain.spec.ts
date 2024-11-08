@@ -2,7 +2,7 @@ import { CreateSubdomainUseCase } from './create-subdomain'
 import { ValidationError } from '@/shared/errors/entity-errors/validation-error'
 import { ResourcesAlreadyExistError } from '@/shared/errors/use-case-errors/resources-already-exist-error'
 import { Subdomain } from '@/domain/user-and-permission-management/enterprise/entities/subdomain'
-import { InMemorySubdomainRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-subdomain-repository'
+import { InMemorySubdomainRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-subdomain-repository'
 
 describe('Create subdomain', () => {
     it('should be able to create subdomain', async () => {

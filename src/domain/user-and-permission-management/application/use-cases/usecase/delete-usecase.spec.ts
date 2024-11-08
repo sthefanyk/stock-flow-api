@@ -1,4 +1,4 @@
-import { InMemoryUseCaseRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-usecase-repository'
+import { InMemoryUseCaseRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-usecase-repository'
 import { DeleteUseCaseUseCase } from './delete-usecase'
 import { ResourceNotFoundError } from '@/shared/errors/use-case-errors/resource-not-found-error'
 import { UseCase } from '@/domain/user-and-permission-management/enterprise/entities/usecase'

@@ -2,7 +2,7 @@ import { CreateUserGroupUseCase } from './create-user-group'
 import { ValidationError } from '@/shared/errors/entity-errors/validation-error'
 import { ResourcesAlreadyExistError } from '@/shared/errors/use-case-errors/resources-already-exist-error'
 import { UserGroup } from '@/domain/user-and-permission-management/enterprise/entities/user-group'
-import { InMemoryUserGroupRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-user-group-repository'
+import { InMemoryUserGroupRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-user-group-repository'
 import { makeUserGroup } from '@/test/factories/user-and-permission-management/make-user-group'
 
 describe('Create user group', () => {

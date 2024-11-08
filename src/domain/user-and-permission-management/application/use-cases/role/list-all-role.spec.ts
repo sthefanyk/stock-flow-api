@@ -1,4 +1,4 @@
-import { InMemoryRoleRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-role-repository'
+import { InMemoryRoleRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-role-repository'
 import { ListAllRoleUseCase } from './list-all-role'
 import { makeRole } from '@/test/factories/user-and-permission-management/make-role'
 import { Role } from '@/domain/user-and-permission-management/enterprise/entities/role'

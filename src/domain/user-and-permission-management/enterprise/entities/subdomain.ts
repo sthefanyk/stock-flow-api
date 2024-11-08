@@ -3,7 +3,7 @@ import { ValidationError } from '@/shared/errors/entity-errors/validation-error'
 
 export interface SubdomainProps {
     name: string
-    description?: string
+    description?: string | null
 }
 
 export class Subdomain extends Entity<SubdomainProps> {

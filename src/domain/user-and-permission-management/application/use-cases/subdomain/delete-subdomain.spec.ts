@@ -1,4 +1,4 @@
-import { InMemorySubdomainRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-subdomain-repository'
+import { InMemorySubdomainRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-subdomain-repository'
 import { DeleteUseCaseUseCase } from './delete-subdomain'
 import { ResourceNotFoundError } from '@/shared/errors/use-case-errors/resource-not-found-error'
 import { Subdomain } from '@/domain/user-and-permission-management/enterprise/entities/subdomain'

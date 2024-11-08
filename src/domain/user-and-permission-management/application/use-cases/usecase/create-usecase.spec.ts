@@ -2,7 +2,7 @@ import { CreateUseCaseUseCase } from './create-usecase'
 import { ValidationError } from '@/shared/errors/entity-errors/validation-error'
 import { ResourcesAlreadyExistError } from '@/shared/errors/use-case-errors/resources-already-exist-error'
 import { UseCase } from '@/domain/user-and-permission-management/enterprise/entities/usecase'
-import { InMemoryUseCaseRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-usecase-repository'
+import { InMemoryUseCaseRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-usecase-repository'
 
 describe('Create usecase', () => {
     it('should be able to create use case', async () => {

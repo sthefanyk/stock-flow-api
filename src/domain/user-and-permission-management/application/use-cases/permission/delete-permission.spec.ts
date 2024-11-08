@@ -1,4 +1,4 @@
-import { InMemoryPermissionRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-permission-repository'
+import { InMemoryPermissionRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-permission-repository'
 import { DeletePermissionUseCase } from './delete-permission'
 import { makePermission } from '@/test/factories/user-and-permission-management/make-permission'
 import { ResourceNotFoundError } from '@/shared/errors/use-case-errors/resource-not-found-error'
@@ -7,8 +7,8 @@ import { TestContext } from 'vitest'
 import { PermissionDAO } from '../../DAO/permission-dao'
 import { SubdomainDAO } from '../../DAO/subdomain-dao'
 import { UseCaseDAO } from '../../DAO/usecase-dao'
-import { InMemorySubdomainRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-subdomain-repository'
-import { InMemoryUseCaseRepository } from '@/infra/repositories/in-memory/user-and-permission-management/in-memory-usecase-repository'
+import { InMemorySubdomainRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-subdomain-repository'
+import { InMemoryUseCaseRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-usecase-repository'
 import { ValidationError } from '@/shared/errors/entity-errors/validation-error'
 
 interface TestContextWithSut extends TestContext {
