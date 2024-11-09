@@ -60,6 +60,30 @@ export class PrismaPermissionRepository implements PermissionDAO {
         return null
     }
 
+    async findByUsecaseAndSubdomain(
+        usecase: string,
+        subdomain: string,
+    ): Promise<Permission | null> {
+        const prismaPermission = await this.prisma.permission.findUnique({
+            where: {
+                subdomain_name_use_case_name: {
+                    subdomain_name: subdomain,
+                    use_case_name: usecase,
+                },
+            },
+            include: {
+                subdomain: true,
+                usecase: true,
+            },
+        })
+
+        if (prismaPermission) {
+            return PrismaPermissionMapper.toEntity(prismaPermission)
+        }
+
+        return null
+    }
+
     async findByUsecase(usecase: UseCase): Promise<Permission[]> {
         const prismaPermissions = await this.prisma.permission.findMany({
             where: {

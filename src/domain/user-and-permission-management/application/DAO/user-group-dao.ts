@@ -1,9 +1,9 @@
 import { UserGroup } from '../../enterprise/entities/user-group'
 
-export interface UserGroupDAO {
-    create(entity: UserGroup): Promise<void>
-    save(entity: UserGroup): Promise<void>
-    delete(entity: UserGroup): Promise<void>
-    findByName(name: string): Promise<UserGroup | null>
-    listAll(): Promise<UserGroup[]>
+export abstract class UserGroupDAO {
+    abstract create(entity: UserGroup): Promise<void>
+    abstract save(entity: UserGroup): Promise<void>
+    abstract delete(entity: UserGroup): Promise<void>
+    abstract findByName(name: string): Promise<UserGroup | null>
+    abstract listAll(): Promise<UserGroup[]>
 }

@@ -1,0 +1,14 @@
+@baseUrl = http://localhost:3333/role
+
+# @name create_role
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+    "name": "financial"
+}
+
+###
+
+# @name list_all_role
+GET {{baseUrl}}

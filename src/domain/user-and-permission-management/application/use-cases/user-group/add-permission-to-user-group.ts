@@ -8,7 +8,8 @@ import { ResourcesAlreadyExistError } from '@/shared/errors/entity-errors/resour
 
 type AddPermissionToUserGroupInput = {
     nameGroup: string
-    permissionID: string
+    usecaseName: string
+    subdomainName: string
 }
 
 type AddPermissionToUserGroupOutput = Either<
@@ -24,7 +25,8 @@ export class AddPermissionToUserGroupUseCase {
 
     async execute({
         nameGroup,
-        permissionID,
+        usecaseName,
+        subdomainName,
     }: AddPermissionToUserGroupInput): Promise<AddPermissionToUserGroupOutput> {
         try {
             const userGroupFound = await this.userGroupRepository.findByName(
@@ -36,7 +38,10 @@ export class AddPermissionToUserGroupUseCase {
             }
 
             const permissionFound =
-                await this.permissionRepository.findById(permissionID)
+                await this.permissionRepository.findByUsecaseAndSubdomain(
+                    usecaseName,
+                    subdomainName,
+                )
 
             if (!permissionFound) {
                 throw new ResourceNotFoundError('Permission not found')

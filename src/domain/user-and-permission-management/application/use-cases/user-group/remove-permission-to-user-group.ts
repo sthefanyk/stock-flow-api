@@ -9,7 +9,8 @@ import { ResourcesAlreadyExistError } from '@/shared/errors/entity-errors/resour
 
 type RemovePermissionToUserGroupInput = {
     nameGroup: string
-    permissionID: string
+    usecaseName: string
+    subdomainName: string
 }
 
 type RemovePermissionToUserGroupOutput = Either<
@@ -25,7 +26,8 @@ export class RemovePermissionToUserGroupUseCase {
 
     async execute({
         nameGroup,
-        permissionID,
+        usecaseName,
+        subdomainName,
     }: RemovePermissionToUserGroupInput): Promise<RemovePermissionToUserGroupOutput> {
         try {
             const userGroupFound = await this.userGroupRepository.findByName(
@@ -37,7 +39,10 @@ export class RemovePermissionToUserGroupUseCase {
             }
 
             const permissionFound =
-                await this.permissionRepository.findById(permissionID)
+                await this.permissionRepository.findByUsecaseAndSubdomain(
+                    usecaseName,
+                    subdomainName,
+                )
 
             if (!permissionFound) {
                 throw new ResourceNotFoundError('Permission not found')

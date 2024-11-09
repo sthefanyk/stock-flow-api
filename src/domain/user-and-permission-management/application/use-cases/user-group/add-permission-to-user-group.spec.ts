@@ -10,9 +10,15 @@ import { AddPermissionToUserGroupUseCase } from './add-permission-to-user-group'
 import { InMemoryPermissionRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-permission-repository'
 import { makePermission } from '@/test/factories/user-and-permission-management/make-permission'
 import { ResourcesAlreadyExistError } from '@/shared/errors/entity-errors/resources-already-exist-error'
+import { SubdomainDAO } from '../../DAO/subdomain-dao'
+import { UseCaseDAO } from '../../DAO/usecase-dao'
+import { InMemorySubdomainRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-subdomain-repository'
+import { InMemoryUseCaseRepository } from '@/test/repositories/in-memory/user-and-permission-management/in-memory-usecase-repository'
 
 interface TestContextWithSut extends TestContext {
     permissionRepository: PermissionDAO
+    subdomainRepository: SubdomainDAO
+    usecaseRepository: UseCaseDAO
     userGroupRepository: UserGroupDAO
     permission: Permission
     userGroup: UserGroup
@@ -23,12 +29,16 @@ describe('AddUserToUserGroupUseCase', () => {
     beforeEach(async (context: TestContextWithSut) => {
         context.userGroupRepository = new InMemoryUserGroupRepository()
         context.permissionRepository = new InMemoryPermissionRepository()
+        context.subdomainRepository = new InMemorySubdomainRepository()
+        context.usecaseRepository = new InMemoryUseCaseRepository()
 
         context.permission = makePermission()
         context.userGroup = makeUserGroup()
 
         context.userGroupRepository.create(context.userGroup)
         context.permissionRepository.create(context.permission)
+        context.subdomainRepository.create(context.permission.subdomain)
+        context.usecaseRepository.create(context.permission.usecase)
 
         context.sut = new AddPermissionToUserGroupUseCase(
             context.userGroupRepository,
@@ -44,7 +54,8 @@ describe('AddUserToUserGroupUseCase', () => {
     }: TestContextWithSut) => {
         const result = await sut.execute({
             nameGroup: userGroup.name.toUpperCase(),
-            permissionID: permission.id.toString(),
+            usecaseName: permission.usecase.name,
+            subdomainName: permission.subdomain.name,
         })
 
         expect(result.isRight()).toBe(true)
@@ -65,12 +76,14 @@ describe('AddUserToUserGroupUseCase', () => {
     }: TestContextWithSut) => {
         await sut.execute({
             nameGroup: userGroup.name.toUpperCase(),
-            permissionID: permission.id.toString(),
+            usecaseName: permission.usecase.name,
+            subdomainName: permission.subdomain.name,
         })
 
         const result = await sut.execute({
             nameGroup: userGroup.name,
-            permissionID: permission.id.toString(),
+            usecaseName: permission.usecase.name,
+            subdomainName: permission.subdomain.name,
         })
 
         expect(result.isLeft()).toBe(true)
@@ -90,7 +103,8 @@ describe('AddUserToUserGroupUseCase', () => {
     }: TestContextWithSut) => {
         const result = await sut.execute({
             nameGroup: 'unregistered',
-            permissionID: permission.id.toString(),
+            usecaseName: permission.usecase.name,
+            subdomainName: permission.subdomain.name,
         })
 
         expect(result.isLeft()).toBe(true)
@@ -110,7 +124,8 @@ describe('AddUserToUserGroupUseCase', () => {
     }: TestContextWithSut) => {
         const result = await sut.execute({
             nameGroup: userGroup.name,
-            permissionID: 'unregistered',
+            usecaseName: 'unregistered',
+            subdomainName: 'unregistered',
         })
 
         expect(result.isLeft()).toBe(true)

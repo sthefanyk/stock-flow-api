@@ -1,11 +1,15 @@
 import { ActionLog } from '../../enterprise/entities/action-log'
 
-export interface ActionLogDAO {
-    create(entity: ActionLog): Promise<void>
-    delete(entity: ActionLog): Promise<void>
-    findById(id: string): Promise<ActionLog | null>
-    findByAction(usecase: string): Promise<ActionLog[]>
-    findByDateInterval(initialDate: Date, endDate: Date): Promise<ActionLog[]>
-    searchInDetails(details: string): Promise<ActionLog[]>
-    listAll(): Promise<ActionLog[]>
+export abstract class ActionLogDAO {
+    abstract create(entity: ActionLog): Promise<void>
+    abstract delete(entity: ActionLog): Promise<void>
+    abstract findById(id: string): Promise<ActionLog | null>
+    abstract findByAction(usecase: string): Promise<ActionLog[]>
+    abstract findByDateInterval(
+        initialDate: Date,
+        endDate: Date,
+    ): Promise<ActionLog[]>
+
+    abstract searchInDetails(details: string): Promise<ActionLog[]>
+    abstract listAll(): Promise<ActionLog[]>
 }

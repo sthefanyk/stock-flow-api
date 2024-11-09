@@ -3,13 +3,15 @@ import { Role } from '../../../enterprise/entities/role'
 import { RoleDAO } from '../../DAO/role-dao'
 import { ResourcesAlreadyExistError } from '@/shared/errors/use-case-errors/resources-already-exist-error'
 import { ValidationError } from '@/shared/errors/entity-errors/validation-error'
+import { Injectable } from '@nestjs/common'
 
-type CreateRoleInput = {
+export type CreateRoleInput = {
     name: string
 }
 
 type CreateRoleOutput = Either<Error, { role: Role }>
 
+@Injectable()
 export class CreateRoleUseCase {
     constructor(private roleRepository: RoleDAO) {}
 

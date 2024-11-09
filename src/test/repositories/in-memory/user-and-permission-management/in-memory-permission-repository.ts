@@ -22,8 +22,17 @@ export class InMemoryPermissionRepository implements PermissionDAO {
         return this.items.find((item) => item.equals(entity)) || null
     }
 
-    async findById(id: string): Promise<Permission | null> {
-        return this.items.find((item) => item.id.toString() === id) || null
+    async findByUsecaseAndSubdomain(
+        usecase: string,
+        subdomain: string,
+    ): Promise<Permission | null> {
+        return (
+            this.items.find(
+                (item) =>
+                    item.usecase.name === usecase &&
+                    item.subdomain.name === subdomain,
+            ) || null
+        )
     }
 
     async findByUsecase(usecase: UseCase): Promise<Permission[]> {
