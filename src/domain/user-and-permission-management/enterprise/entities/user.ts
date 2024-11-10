@@ -62,6 +62,12 @@ export class User extends Entity<UserProps> {
         props.name = props.name.toUpperCase()
 
         // TODO: Validation for the email
+        const emailRegex = /^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/
+        if (!props.email || !emailRegex.test(props.email)) {
+            throw new ValidationError('The email is invalid.')
+        }
+        props.email = props.email.toLowerCase()
+
         // TODO: Validation for the password
         // TODO: Validation for the status
         return props

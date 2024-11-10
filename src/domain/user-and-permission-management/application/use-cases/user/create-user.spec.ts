@@ -10,10 +10,14 @@ import { RoleDAO } from '../../DAO/role-dao'
 import { MockInstance, TestContext } from 'vitest'
 import { ResourceNotFoundError } from '@/shared/errors/use-case-errors/resource-not-found-error'
 import { waitFor } from '@/test/utils/wait-for'
+import { StubHasher } from '@/test/cryptography/stub-hasher'
+import { HashGenerator } from '../../cryptography/hash-generator'
 
 interface TestContextWithSut extends TestContext {
     userRepository: UserDAO
     roleRepository: RoleDAO
+    hasher: HashGenerator
+
     userExecuted: User
     entity: User
     sut: CreateUserUseCase
@@ -24,10 +28,12 @@ describe('Create user', () => {
     beforeEach(async (context: TestContextWithSut) => {
         context.userRepository = new InMemoryUserRepository()
         context.roleRepository = new InMemoryRoleRepository()
+        context.hasher = new StubHasher()
 
         context.sut = new CreateUserUseCase(
             context.userRepository,
             context.roleRepository,
+            context.hasher,
         )
 
         context.userExecuted = makeUser()
@@ -45,6 +51,7 @@ describe('Create user', () => {
         entity,
         userExecuted,
         logSpy,
+        hasher,
     }: TestContextWithSut) => {
         const result = await sut.execute({
             userWhoExecutedID: userExecuted.id.toString(),
@@ -62,6 +69,9 @@ describe('Create user', () => {
         const items = await userRepository.listAll()
         expect(items).toHaveLength(2)
         expect(items[1].email).toBe(entity.email)
+
+        const passwordHashed = await hasher.hash(entity.password)
+        expect(items[1].password).toBe(passwordHashed)
 
         await waitFor(async () => {
             expect(logSpy).toHaveBeenCalled()
@@ -124,10 +134,10 @@ describe('Create user', () => {
         entity,
         userExecuted,
     }: TestContextWithSut) => {
-        await userRepository.create(makeUser({ email: 'johndoe.example.com' }))
+        await userRepository.create(makeUser({ email: 'johndoe@example.com' }))
 
         const user = makeUser({
-            email: 'johndoe.example.com',
+            email: 'johndoe@example.com',
             role: entity.role,
         })
 

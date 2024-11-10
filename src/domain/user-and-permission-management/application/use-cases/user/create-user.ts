@@ -7,6 +7,7 @@ import { RoleDAO } from '../../DAO/role-dao'
 import { ResourceNotFoundError } from '@/shared/errors/use-case-errors/resource-not-found-error'
 import { UserStatus } from '@/domain/user-and-permission-management/enterprise/enums/user-status'
 import { UseCase } from '@/shared/use-cases/use-case'
+import { HashGenerator } from '../../cryptography/hash-generator'
 
 type CreateUserInput = {
     userWhoExecutedID: string
@@ -23,6 +24,7 @@ export class CreateUserUseCase extends UseCase {
     constructor(
         private userRepository: UserDAO,
         private roleRepository: RoleDAO,
+        private hashGenerator: HashGenerator,
     ) {
         super(CreateUserUseCase.name)
     }
@@ -54,10 +56,12 @@ export class CreateUserUseCase extends UseCase {
                 throw new ResourceNotFoundError('Role not found')
             }
 
+            const hashedPassword = await this.hashGenerator.hash(password)
+
             const user = User.create({
                 name,
                 email,
-                password,
+                password: hashedPassword,
                 role: roleFound,
                 status: UserStatus.getUserStatusByName(status)!,
             })
