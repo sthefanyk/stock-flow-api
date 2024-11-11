@@ -11,11 +11,13 @@ import { ActionLogDAO } from '../DAO/action-log-dao'
 import { UserDAO } from '@/domain/user-and-permission-management/application/DAO/user-dao'
 import { UseCaseDAO } from '@/domain/user-and-permission-management/application/DAO/usecase-dao'
 import { MockInstance, TestContext } from 'vitest'
+import { NewActionLogUseCase } from '../use-cases/new-action-log'
 
 interface TestContextWithSut extends TestContext {
     actionRepository: ActionLogDAO
     userRepository: UserDAO
     useCaseRepository: UseCaseDAO
+    sut: NewActionLogUseCase
     actionCreatedSpy: MockInstance
 }
 
@@ -28,11 +30,13 @@ describe('OnNewActionLog', () => {
         await context.userRepository.create(makeUser({}, 'test'))
         await context.useCaseRepository.create(makeUseCase({ name: 'test' }))
 
-        new OnNewActionLog(
+        context.sut = new NewActionLogUseCase(
             context.actionRepository,
             context.userRepository,
             context.useCaseRepository,
         )
+
+        new OnNewActionLog(context.sut)
 
         context.actionCreatedSpy = vi.spyOn(context.actionRepository, 'create')
     })
@@ -56,6 +60,5 @@ describe('OnNewActionLog', () => {
             expect(items).toHaveLength(1)
             expect(items[0].id).toBe(aggregate.id)
         })
-
     })
 })

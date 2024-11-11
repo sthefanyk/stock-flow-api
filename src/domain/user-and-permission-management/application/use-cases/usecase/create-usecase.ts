@@ -3,6 +3,7 @@ import { UseCase } from '../../../enterprise/entities/usecase'
 import { UseCaseDAO } from '../../DAO/usecase-dao'
 import { ResourcesAlreadyExistError } from '@/shared/errors/use-case-errors/resources-already-exist-error'
 import { ValidationError } from '@/shared/errors/entity-errors/validation-error'
+import { Injectable } from '@nestjs/common'
 
 type CreateUseCaseInput = {
     name: string
@@ -11,6 +12,7 @@ type CreateUseCaseInput = {
 
 type CreateUseCaseOutput = Either<Error, { usecase: UseCase }>
 
+@Injectable()
 export class CreateUseCaseUseCase {
     constructor(private usecaseRepository: UseCaseDAO) {}
 

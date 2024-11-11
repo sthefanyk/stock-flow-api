@@ -4,6 +4,7 @@ import { UseCaseDAO } from '@/domain/user-and-permission-management/application/
 import { Either, left, right } from '@/shared/errors/contracts/either'
 import { ResourceNotFoundError } from '@/shared/errors/use-case-errors/resource-not-found-error'
 import { ActionLog } from '../../enterprise/entities/action-log'
+import { Injectable } from '@nestjs/common'
 
 type NewActionLogInput = {
     actionLog: ActionLog
@@ -11,6 +12,7 @@ type NewActionLogInput = {
 
 type NewActionLogOutput = Either<Error, null>
 
+@Injectable()
 export class NewActionLogUseCase {
     constructor(
         private actionLogRepository: ActionLogDAO,

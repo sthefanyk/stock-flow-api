@@ -12,15 +12,18 @@ Content-Type: application/json
 
 ###
 
-# @name create_new_access_for_employee
-POST {{baseUrl}}/employee-management/access
+# @name create_usecase
+POST {{baseUrl}}/usecase
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-    "name": "Sthefany Kimberly",
-    "email": "sthe6@gmail.com",
-    "password": "12345678",
-    "role_name": "FINANCIAL",
-    "status": "ACTIVE"
+    "name": "CreateUserUseCase",
+    "description": "Cria uma novo usuário no sistema"
 }
+
+###
+
+# @name list_all_usecase
+GET {{baseUrl}}/usecase
+Authorization: Bearer {{authToken}}

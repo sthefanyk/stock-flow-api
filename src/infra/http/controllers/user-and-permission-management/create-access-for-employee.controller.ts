@@ -5,14 +5,15 @@ import {
     Controller,
     HttpCode,
     NotFoundException,
-    Post,
-    UsePipes,
+    Post
 } from '@nestjs/common'
 import { z } from 'zod'
 import { ZodValidationPipe } from '../../pipes/zod-validation.pipe'
 import { CreateUserUseCase } from '@/domain/user-and-permission-management/application/use-cases/user/create-user'
 import { ResourceNotFoundError } from '@/shared/errors/use-case-errors/resource-not-found-error'
 import { ResourcesAlreadyExistError } from '@/shared/errors/use-case-errors/resources-already-exist-error'
+import { CurrentUser } from '@/infra/auth/current-user.decorator'
+import { UserPayload } from '@/infra/auth/jwt.strategy'
 
 const createNewAccessForEmployeeBodySchema = z.object({
     name: z.string(),
@@ -32,22 +33,15 @@ export class CreateNewAccessForEmployee {
 
     @Post('/access')
     @HttpCode(201)
-    @UsePipes(
-        new ZodValidationPipe<CreateNewAccessForEmployeeBodySchema>(
-            createNewAccessForEmployeeBodySchema,
-        ),
-    )
-    async handle(@Body() data: CreateNewAccessForEmployeeBodySchema) {
-        const {
-            name,
-            email,
-            password,
-            role_name: role,
-            status,
-        } = createNewAccessForEmployeeBodySchema.parse(data)
+    async handle(
+        @Body(new ZodValidationPipe(createNewAccessForEmployeeBodySchema))
+        data: CreateNewAccessForEmployeeBodySchema,
+        @CurrentUser() user: UserPayload,
+    ) {
+        const { name, email, password, role_name: role, status } = data
 
         const result = await this.createUser.execute({
-            userWhoExecutedID: '',
+            userWhoExecutedID: user.sub,
             name,
             email,
             password,

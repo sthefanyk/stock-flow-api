@@ -2,11 +2,13 @@ import { Either, left, right } from '@/shared/errors/contracts/either'
 import { UseCase } from '../../../enterprise/entities/usecase'
 import { UseCaseDAO } from '../../DAO/usecase-dao'
 import { ValidationError } from '@/shared/errors/entity-errors/validation-error'
+import { Injectable } from '@nestjs/common'
 
 // type ListAllUseCaseInput = null
 
 type ListAllUseCaseOutput = Either<Error, { usecases: UseCase[] }>
 
+@Injectable()
 export class ListAllUseCaseUseCase {
     constructor(private usecaseRepository: UseCaseDAO) {}
 

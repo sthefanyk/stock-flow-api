@@ -28,7 +28,7 @@ export class CreateUserUseCase extends UseCase {
         private roleRepository: RoleDAO,
         private hashGenerator: HashGenerator,
     ) {
-        super(CreateUserUseCase.name)
+        super('create-user')
     }
 
     async execute({
