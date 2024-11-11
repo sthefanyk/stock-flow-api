@@ -7,9 +7,12 @@ import { CreateRoleUseCase } from '@/domain/user-and-permission-management/appli
 import { CreateRoleController } from './controllers/user-and-permission-management/role/create-role.controller'
 import { ListAllRoleController } from './controllers/user-and-permission-management/role/list-all.controller'
 import { ListAllRoleUseCase } from '@/domain/user-and-permission-management/application/use-cases/role/list-all-role'
+import { CreateUserUseCase } from '@/domain/user-and-permission-management/application/use-cases/user/create-user'
+import { AutheticateUserUseCase } from '@/domain/user-and-permission-management/application/use-cases/user/authenticate-user'
+import { CryptographyModule } from '../cryptography/cryptography.module'
 
 @Module({
-    imports: [DatabaseModule],
+    imports: [DatabaseModule, CryptographyModule],
     controllers: [
         CreateNewAccessForEmployee,
         AuthenticateController,
@@ -17,6 +20,11 @@ import { ListAllRoleUseCase } from '@/domain/user-and-permission-management/appl
         CreateRoleController,
         ListAllRoleController,
     ],
-    providers: [CreateRoleUseCase, ListAllRoleUseCase],
+    providers: [
+        CreateRoleUseCase,
+        ListAllRoleUseCase,
+        CreateUserUseCase,
+        AutheticateUserUseCase,
+    ],
 })
 export class HttpModule {}

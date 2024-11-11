@@ -49,10 +49,10 @@ describe('ChangeUserRole', () => {
 
         expect(result.isRight()).toBe(true)
         const { user } = result.value as { user: User }
-        expect(user.role).toBe(role)
+        expect(user.role.name).toBe(role.name)
 
         const items = await userRepository.listAll()
-        expect(items[0].role).toBe(role)
+        expect(items[0].role.name).toBe(role.name)
     })
 
     it('should return a ResourceNotFoundError if the user is not found', async ({

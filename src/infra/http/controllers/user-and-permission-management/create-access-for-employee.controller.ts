@@ -1,24 +1,22 @@
 import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
-import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import {
     Body,
-    ConflictException,
     Controller,
     HttpCode,
-    NotFoundException,
     Post,
     UseGuards,
     UsePipes,
 } from '@nestjs/common'
-import { hash } from 'bcryptjs'
 import { z } from 'zod'
 import { ZodValidationPipe } from '../../pipes/zod-validation.pipe'
+import { CreateUserUseCase } from '@/domain/user-and-permission-management/application/use-cases/user/create-user'
 
 const createNewAccessForEmployeeBodySchema = z.object({
     name: z.string(),
     email: z.string().email(),
     password: z.string().min(8),
     role_name: z.string().toUpperCase(),
+    status: z.string().toUpperCase(),
 })
 
 type CreateNewAccessForEmployeeBodySchema = z.infer<
@@ -28,7 +26,7 @@ type CreateNewAccessForEmployeeBodySchema = z.infer<
 @Controller('/employee-management')
 @UseGuards(JwtAuthGuard)
 export class CreateNewAccessForEmployee {
-    constructor(private prisma: PrismaService) {}
+    constructor(private createUser: CreateUserUseCase) {}
 
     @Post('/access')
     @HttpCode(201)
@@ -42,45 +40,19 @@ export class CreateNewAccessForEmployee {
             name,
             email,
             password,
-            role_name: roleName,
+            role_name: role,
+            status,
         } = createNewAccessForEmployeeBodySchema.parse(data)
 
-        const userWithSameEmail = await this.prisma.user.findUnique({
-            where: {
-                email,
-            },
+        const result = await this.createUser.execute({
+            userWhoExecutedID: '',
+            name,
+            email,
+            password,
+            role,
+            status,
         })
 
-        if (userWithSameEmail) {
-            throw new ConflictException(
-                'Access with same e-mail already exists.',
-            )
-        }
-
-        const role = await this.prisma.role.findUnique({
-            where: {
-                name: roleName,
-            },
-        })
-
-        if (!role) {
-            throw new NotFoundException('Role not found.')
-        }
-
-        const passwordHash = await hash(password, 8)
-
-        await this.prisma.user.create({
-            data: {
-                name,
-                email,
-                password_hash: passwordHash,
-                role: {
-                    connect: {
-                        name: roleName,
-                    },
-                },
-                status: '',
-            },
-        })
+        return result.value
     }
 }

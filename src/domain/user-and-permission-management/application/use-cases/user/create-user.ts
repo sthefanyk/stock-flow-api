@@ -8,6 +8,7 @@ import { ResourceNotFoundError } from '@/shared/errors/use-case-errors/resource-
 import { UserStatus } from '@/domain/user-and-permission-management/enterprise/enums/user-status'
 import { UseCase } from '@/shared/use-cases/use-case'
 import { HashGenerator } from '../../cryptography/hash-generator'
+import { Injectable } from '@nestjs/common'
 
 type CreateUserInput = {
     userWhoExecutedID: string
@@ -20,6 +21,7 @@ type CreateUserInput = {
 
 type CreateUserOutput = Either<Error, { user: User }>
 
+@Injectable()
 export class CreateUserUseCase extends UseCase {
     constructor(
         private userRepository: UserDAO,

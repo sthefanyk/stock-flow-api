@@ -43,7 +43,7 @@ describe('Create access for employee (E2E)', () => {
                         name: 'TEST',
                     },
                 },
-                status: '',
+                status: 'active',
             },
         })
 
@@ -56,13 +56,14 @@ describe('Create access for employee (E2E)', () => {
                 name: 'John Doe 2',
                 email: 'johndoe2@example.com',
                 password: '12345678',
-                roleName: 'TEST',
+                role_name: 'TEST',
+                status: 'ACTIVE',
             })
 
         expect(response.statusCode).toBe(201)
         const userOnDatabase = await prisma.user.findFirst({
             where: {
-                name: 'John Doe 2',
+                email: 'johndoe2@example.com',
             },
         })
         expect(userOnDatabase).toBeTruthy()

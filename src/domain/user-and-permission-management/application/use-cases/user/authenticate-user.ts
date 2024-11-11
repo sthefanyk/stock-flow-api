@@ -3,6 +3,7 @@ import { UserDAO } from '../../DAO/user-dao'
 import { HashComparer } from '../../cryptography/hash-comparer'
 import { Encrypter } from '../../cryptography/encrypter'
 import { WrogCredentialsError } from '@/shared/errors/use-case-errors/wrong-credentials-error'
+import { Injectable } from '@nestjs/common'
 
 type AutheticateUserInput = {
     email: string
@@ -14,6 +15,7 @@ type AutheticateUserOutput = Either<
     { accessToken: string }
 >
 
+@Injectable()
 export class AutheticateUserUseCase {
     constructor(
         private userRepository: UserDAO,
@@ -44,7 +46,7 @@ export class AutheticateUserUseCase {
             }
 
             const accessToken = await this.encrypter.encrypt({
-                sub: userFound.id,
+                sub: userFound.id.toString(),
             })
 
             return right({ accessToken })

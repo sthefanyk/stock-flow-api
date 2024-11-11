@@ -1,0 +1,26 @@
+@baseUrl = http://localhost:3333
+@authToken = {{authenticate.response.body.access_token}}
+
+# @name authenticate
+POST {{baseUrl}}/sessions
+Content-Type: application/json
+
+{
+    "email": "sthe@gmail.com",
+    "password": "12345678"
+}
+
+###
+
+# @name create_new_access_for_employee
+POST {{baseUrl}}/employee-management/access
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "name": "Sthefany Kimberly",
+    "email": "sthe2@gmail.com",
+    "password": "12345678",
+    "role_name": "FINANCIAL",
+    "status": "ACTIVE"
+}
