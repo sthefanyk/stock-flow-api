@@ -1,15 +1,18 @@
-import { JwtAuthGuard } from '@/infra/auth/jwt-auth.guard'
 import {
+    BadRequestException,
     Body,
+    ConflictException,
     Controller,
     HttpCode,
+    NotFoundException,
     Post,
-    UseGuards,
     UsePipes,
 } from '@nestjs/common'
 import { z } from 'zod'
 import { ZodValidationPipe } from '../../pipes/zod-validation.pipe'
 import { CreateUserUseCase } from '@/domain/user-and-permission-management/application/use-cases/user/create-user'
+import { ResourceNotFoundError } from '@/shared/errors/use-case-errors/resource-not-found-error'
+import { ResourcesAlreadyExistError } from '@/shared/errors/use-case-errors/resources-already-exist-error'
 
 const createNewAccessForEmployeeBodySchema = z.object({
     name: z.string(),
@@ -24,7 +27,6 @@ type CreateNewAccessForEmployeeBodySchema = z.infer<
 >
 
 @Controller('/employee-management')
-@UseGuards(JwtAuthGuard)
 export class CreateNewAccessForEmployee {
     constructor(private createUser: CreateUserUseCase) {}
 
@@ -52,6 +54,19 @@ export class CreateNewAccessForEmployee {
             role,
             status,
         })
+
+        if (result.isLeft()) {
+            const error = result.value
+
+            switch (error.constructor) {
+                case ResourceNotFoundError:
+                    throw new NotFoundException(error.message)
+                case ResourcesAlreadyExistError:
+                    throw new ConflictException(error.message)
+                default:
+                    throw new BadRequestException(error.message)
+            }
+        }
 
         return result.value
     }

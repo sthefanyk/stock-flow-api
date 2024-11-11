@@ -1,7 +1,16 @@
-import { Body, Controller, Post, UsePipes } from '@nestjs/common'
+import {
+    BadRequestException,
+    Body,
+    Controller,
+    Post,
+    UnauthorizedException,
+    UsePipes,
+} from '@nestjs/common'
 import { z } from 'zod'
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe'
 import { AutheticateUserUseCase } from '@/domain/user-and-permission-management/application/use-cases/user/authenticate-user'
+import { WrogCredentialsError } from '@/shared/errors/use-case-errors/wrong-credentials-error'
+import { Public } from '@/infra/auth/public'
 
 const authenticateBodySchema = z.object({
     email: z.string().email(),
@@ -11,6 +20,7 @@ const authenticateBodySchema = z.object({
 type AuthenticateBodySchema = z.infer<typeof authenticateBodySchema>
 
 @Controller('sessions')
+@Public()
 export class AuthenticateController {
     constructor(private authenticateUser: AutheticateUserUseCase) {}
 
@@ -27,7 +37,14 @@ export class AuthenticateController {
         })
 
         if (result.isLeft()) {
-            return result.value
+            const error = result.value
+
+            switch (error.constructor) {
+                case WrogCredentialsError:
+                    throw new UnauthorizedException(error.message)
+                default:
+                    throw new BadRequestException(error.message)
+            }
         }
 
         return {

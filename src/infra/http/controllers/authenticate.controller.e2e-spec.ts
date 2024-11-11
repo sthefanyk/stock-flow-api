@@ -39,7 +39,7 @@ describe('Authenticate (E2E)', () => {
                         name: 'TEST',
                     },
                 },
-                status: 'active',
+                status: 'ACTIVE',
             },
         })
 
