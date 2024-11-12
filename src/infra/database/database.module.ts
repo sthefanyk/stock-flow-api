@@ -8,8 +8,10 @@ import { UseCaseDAO } from '@/domain/user-and-permission-management/application/
 import { PermissionDAO } from '@/domain/user-and-permission-management/application/DAO/permission-dao'
 import { UserGroupDAO } from '@/domain/user-and-permission-management/application/DAO/user-group-dao'
 import { ActionLogDAO } from '@/domain/activity-log/application/DAO/action-log-dao'
+import { CacheModule } from '../cache/cache.module'
 
 @Module({
+    imports: [CacheModule],
     providers: [PrismaService, ...RepositoriesProvider],
     exports: [
         PrismaService,

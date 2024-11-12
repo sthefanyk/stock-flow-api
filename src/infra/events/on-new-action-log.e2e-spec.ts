@@ -6,6 +6,7 @@ import { hash } from 'bcryptjs'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
 import { AppModule } from '@/infra/app.module'
 import { waitFor } from '@/test/utils/wait-for'
+import { DomainEvents } from '@/shared/events/domain-events'
 
 describe('On new action log (E2E)', () => {
     let app: INestApplication
@@ -21,6 +22,8 @@ describe('On new action log (E2E)', () => {
 
         prisma = moduleRef.get(PrismaService)
         jwt = moduleRef.get(JwtService)
+
+        DomainEvents.shouldRun = true
 
         await app.init()
     })
@@ -73,6 +76,7 @@ describe('On new action log (E2E)', () => {
                     user_who_executed_id: user.id,
                 },
             })
+
             expect(userOnDatabase).not.toBeNull()
         })
     })
